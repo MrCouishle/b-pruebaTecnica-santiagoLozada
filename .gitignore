@@ -1,0 +1,27 @@
+# Configuración de .NET
+
+*appsettings.json
+*.*Development.json
+
+# Carpetas y archivos visual studio
+
+.vs
+*.log
+.vscode/
+*.vspscc
+*.vssscc
+/bin/
+/obj/
+
+# Archivos generales del proyecto, dependencias, librerias, etc
+
+*bin
+*.vs
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
