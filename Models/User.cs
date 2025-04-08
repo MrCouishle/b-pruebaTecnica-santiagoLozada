@@ -14,5 +14,6 @@ namespace Models
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Balance { get; set; } = 0m;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
