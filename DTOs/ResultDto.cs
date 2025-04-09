@@ -19,4 +19,14 @@ namespace DTOs
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
+
+    public class BetValidationDto
+    {
+        public Guid UserId { get; set; }
+        public decimal BetValue { get; set; }
+        public int? ResultNumber { get; set; }
+        public int? BetNumber { get; set; } // Número específico
+        public string? BetColor { get; set; } // "red", "black", "green"
+        public string? EvenOdd { get; set; } // "even", "odd"
+    }
 }

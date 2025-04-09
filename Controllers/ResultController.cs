@@ -17,6 +17,13 @@ namespace Roulette.Controllers
             return SendResponse(response);
         }
 
+        [HttpGet("GetValidateResult")]
+        public async Task<ActionResult<Result>> GetValidateResult([FromQuery] BetValidationDto bet)
+        {
+            var response = await _resultServices.GetValidateResult(bet);
+            return SendResponse(response);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Result>> Create(ResultCreateDto result)
         {

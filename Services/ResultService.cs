@@ -3,6 +3,7 @@ namespace Services
     public interface IResultServices
     {
         Task<Response<List<Result>>> GetResults();
+        Task<Response<Result>> GetValidateResult(BetValidationDto bet);
         Task<Response<Result>> Create(ResultCreateDto result);
     }
 
@@ -44,6 +45,77 @@ namespace Services
             );
 
             return SuccessResponse(createdResult!, MessageConst.ResultsSuccesCreate);
+        }
+
+        public async Task<Response<Result>> GetValidateResult(BetValidationDto bet)
+        {
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Id == bet.UserId);
+            if (user == null)
+            {
+                return ErrorResponse<Result>("Usuario no encontrado.");
+            }
+            if (!bet.ResultNumber.HasValue)
+            {
+                return ErrorResponse<Result>("Número de resultado no proporcionado.");
+            }
+
+            var resultColor = RouletteHelper.GetColor(bet.ResultNumber.Value);
+            var resultColorStr = resultColor.ToString().ToLower();
+
+            decimal profit = 0;
+
+            // Validaciones de coincidencias
+            bool colorMatch =
+                !string.IsNullOrEmpty(bet.BetColor) && bet.BetColor.ToLower() == resultColorStr;
+            bool numberMatch = bet.BetNumber.HasValue && bet.BetNumber.Value == bet.ResultNumber;
+
+            bool evenOddMatch = false;
+            if (!string.IsNullOrEmpty(bet.EvenOdd))
+            {
+                bool isEven = bet.ResultNumber % 2 == 0;
+                if (bet.EvenOdd.ToLower() == "even" && isEven)
+                    evenOddMatch = true;
+                if (bet.EvenOdd.ToLower() == "odd" && !isEven)
+                    evenOddMatch = true;
+            }
+
+            // Calcular ganancia
+            if (numberMatch && string.IsNullOrEmpty(bet.BetColor)) // Solo número
+            {
+                profit = bet.BetValue * 3;
+            }
+            else if (numberMatch && colorMatch) // Número y color
+            {
+                profit = bet.BetValue * 3;
+            }
+            else if (evenOddMatch && colorMatch)
+            {
+                profit = bet.BetValue;
+            }
+            else if (evenOddMatch && string.IsNullOrEmpty(bet.BetColor)) // Solo par/impar
+            {
+                profit = bet.BetValue;
+            }
+            else if (colorMatch)
+            {
+                profit = bet.BetValue / 2;
+            }
+
+            var newResult = new Result
+            {
+                BetValue = bet.BetValue,
+                Profit = profit,
+                RemainingBalance = user.Balance, // puedes actualizarlo luego si es necesario
+                UserId = user.Id,
+                Winner = profit > 0,
+                RouletteNumber = bet.ResultNumber.Value,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            return SuccessResponse(
+                newResult,
+                $"Resultado: número {bet.ResultNumber} ({resultColorStr}). Ganancia: {profit:C2}"
+            );
         }
     }
 }

@@ -12,9 +12,16 @@ namespace Roulette.Controllers
         private readonly IRouletteNumberServices _rouletteNumberServices = RouletteNumberServices;
 
         [HttpGet("GetRouletteNumbers")]
-        public async Task<ActionResult<List<RouletteNumber>>> Get()
+        public async Task<ActionResult<Dictionary<int, string>>> Get()
         {
             var response = await _rouletteNumberServices.Get();
+            return SendResponse(response);
+        }
+
+        [HttpGet("GetRandomNumber")]
+        public async Task<ActionResult<RouletteNumberDto>> GetRandom()
+        {
+            var response = await _rouletteNumberServices.GetRandom();
             return SendResponse(response);
         }
     }

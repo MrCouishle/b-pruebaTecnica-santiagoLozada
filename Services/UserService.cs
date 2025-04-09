@@ -45,7 +45,13 @@ namespace Services
 
             if (existingUser != null)
             {
-                return InfoResponse<User>(MessageConst.UserAlreadyExists);
+                existingUser.Balance += user.Balance;
+                await _context.SaveChangesAsync();
+
+                return SuccessResponse(
+                    existingUser,
+                    $"Usuario {user.Name} encontrado. Saldo actualizado a {existingUser.Balance}."
+                );
             }
 
             User newUser = new User
