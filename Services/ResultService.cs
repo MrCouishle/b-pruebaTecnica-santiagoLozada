@@ -27,6 +27,14 @@ namespace Services
 
         public async Task<Response<Result>> Create(ResultCreateDto result)
         {
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Id == result.UserId);
+            if (user == null)
+            {
+                return ErrorResponse<Result>("Usuario no encontrado.");
+            }
+
+            user.Balance = user.Balance - result.BetValue + result.Profit;
+
             Result newResult = new Result
             {
                 BetValue = result.BetValue,
@@ -40,9 +48,9 @@ namespace Services
             _context.Result.Add(newResult);
             await _context.SaveChangesAsync();
 
-            var createdResult = await _context.Result.FirstOrDefaultAsync(
-                u => u.Id == newResult.Id
-            );
+            var createdResult = await _context.Result
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.Id == newResult.Id);
 
             return SuccessResponse(createdResult!, MessageConst.ResultsSuccesCreate);
         }
@@ -105,7 +113,8 @@ namespace Services
             {
                 BetValue = bet.BetValue,
                 Profit = profit,
-                RemainingBalance = user.Balance, // puedes actualizarlo luego si es necesario
+                CurrentBalance = user.Balance - bet.BetValue + profit,
+                RemainingBalance = user.Balance - bet.BetValue,
                 UserId = user.Id,
                 Winner = profit > 0,
                 RouletteNumber = bet.ResultNumber.Value,

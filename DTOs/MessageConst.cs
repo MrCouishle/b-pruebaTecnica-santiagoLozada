@@ -13,7 +13,7 @@ namespace DTOs
             "Los datos de la ruleta se consultaron correctamente.";
         public const string RouletteNumbersNoResults = "No se encontrarón datos de la ruleta.";
 
-        public const string ResultsSuccesCreate = "Los resultados se guardaron correctamente.";
+        public const string ResultsSuccesCreate = "El resultado se guardó correctamente.";
         public const string ResultsSuccesConsult = "Los resultados se consultaron correctamente.";
         public const string ResultNoResults = "No se encontrarón resultados.";
 

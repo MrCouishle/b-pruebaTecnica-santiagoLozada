@@ -11,6 +11,11 @@ namespace DTOs
         [Column(TypeName = "decimal(18, 2)")]
         public decimal RemainingBalance { get; set; } = 0m;
 
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal CurrentBalance { get; set; } = 0m;
+
+        public bool Winner { get; set; }
+
         [Required]
         public Guid UserId { get; set; }
         public User? User { get; set; }
@@ -26,7 +31,7 @@ namespace DTOs
         public decimal BetValue { get; set; }
         public int? ResultNumber { get; set; }
         public int? BetNumber { get; set; } // Número específico
-        public string? BetColor { get; set; } // "red", "black", "green"
-        public string? EvenOdd { get; set; } // "even", "odd"
+        public string? BetColor { get; set; } // red, black, green
+        public string? EvenOdd { get; set; } // even, odd
     }
 }

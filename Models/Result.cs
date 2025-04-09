@@ -15,6 +15,9 @@ namespace Models
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal RemainingBalance { get; set; } = 0m;
+
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal CurrentBalance { get; set; } = 0m;
         public bool Winner { get; set; }
 
         [Required]
