@@ -28,8 +28,8 @@ namespace DTOs
     public class BetValidationDto
     {
         public Guid UserId { get; set; }
-        public decimal BetValue { get; set; }
-        public int? ResultNumber { get; set; }
+        public decimal BetValue { get; set; } // Valor apostado
+        public int? ResultNumber { get; set; } // Resultado de la ruleta
         public int? BetNumber { get; set; } // Número específico
         public string? BetColor { get; set; } // red, black, green
         public string? EvenOdd { get; set; } // even, odd

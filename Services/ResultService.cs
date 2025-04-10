@@ -74,9 +74,10 @@ namespace Services
             decimal profit = 0;
 
             // Validaciones de coincidencias
+            bool numberMatch = bet.BetNumber.HasValue && bet.BetNumber.Value == bet.ResultNumber;
+
             bool colorMatch =
                 !string.IsNullOrEmpty(bet.BetColor) && bet.BetColor.ToLower() == resultColorStr;
-            bool numberMatch = bet.BetNumber.HasValue && bet.BetNumber.Value == bet.ResultNumber;
 
             bool evenOddMatch = false;
             if (!string.IsNullOrEmpty(bet.EvenOdd))
@@ -88,26 +89,17 @@ namespace Services
                     evenOddMatch = true;
             }
 
-            // Calcular ganancia
-            if (numberMatch && string.IsNullOrEmpty(bet.BetColor)) // Solo número
+            if (colorMatch && bet.BetNumber == null && string.IsNullOrEmpty(bet.EvenOdd))
             {
-                profit = bet.BetValue * 3;
-            }
-            else if (numberMatch && colorMatch) // Número y color
-            {
-                profit = bet.BetValue * 3;
+                profit = bet.BetValue + (bet.BetValue / 2);
             }
             else if (evenOddMatch && colorMatch)
             {
-                profit = bet.BetValue;
+                profit = bet.BetValue + bet.BetValue;
             }
-            else if (evenOddMatch && string.IsNullOrEmpty(bet.BetColor)) // Solo par/impar
+            else if (numberMatch)
             {
-                profit = bet.BetValue;
-            }
-            else if (colorMatch)
-            {
-                profit = bet.BetValue / 2;
+                profit = bet.BetValue + (bet.BetValue * 3);
             }
 
             var newResult = new Result
