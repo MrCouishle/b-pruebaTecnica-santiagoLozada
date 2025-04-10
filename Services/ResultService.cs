@@ -89,7 +89,9 @@ namespace Services
                     evenOddMatch = true;
             }
 
-            if (colorMatch && bet.BetNumber == null && string.IsNullOrEmpty(bet.EvenOdd))
+            bool hasEvenOdd = bet.EvenOdd?.ToLower() == "even" || bet.EvenOdd?.ToLower() == "odd";
+
+            if (colorMatch && bet.BetNumber == null && !hasEvenOdd)
             {
                 profit = bet.BetValue + (bet.BetValue / 2);
             }
