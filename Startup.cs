@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using System.Net;
 using Services;
 
 namespace Roulette
@@ -34,7 +33,6 @@ namespace Roulette
             });
 
             services.AddHttpContextAccessor();
-            services.AddSignalR();
 
             services.Configure<KestrelServerOptions>(options =>
             {
@@ -56,7 +54,6 @@ namespace Roulette
 
         private static void ConfigureCors(IServiceCollection services)
         {
-            string serverIp = GetIPLocal();
             services.AddCors(options =>
             {
                 options.AddPolicy(
@@ -71,19 +68,6 @@ namespace Roulette
                     }
                 );
             });
-        }
-
-        private static string GetIPLocal()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                {
-                    return ip.ToString();
-                }
-            }
-            throw new Exception("No se pudo encontrar la dirección IP local.");
         }
 
         private void ConfigureDatabase(IServiceCollection services)

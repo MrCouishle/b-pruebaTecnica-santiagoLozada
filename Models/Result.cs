@@ -1,5 +1,3 @@
-using Helpers;
-
 namespace Models
 {
     public class Result
